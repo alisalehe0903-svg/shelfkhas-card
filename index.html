@@ -56,7 +56,7 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
     line-height: 1.8;
     -webkit-text-size-adjust: 100%;
   }
-  .wrap { max-width: 440px; margin: 0 auto; padding: 14px 20px 48px; }
+  .wrap { max-width: 440px; margin: 0 auto; padding: 14px 20px 104px; }
 
   .logo-wrap { position: relative; width: 100%; }
   .logo-wrap::before {
@@ -252,6 +252,86 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
   .btn:hover { background: rgba(201, 164, 92, .1); }
   .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
   .status { min-height: 1.6em; margin: 8px 0 0; text-align: center; font-size: 14px; color: var(--muted); }
+
+  /* Floating quick-contact bar (appears after the user scrolls into the page) */
+  .fab {
+    position: fixed; left: 50%; z-index: 40;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    display: flex; gap: 6px; padding: 6px; width: max-content; max-width: calc(100vw - 32px);
+    border: 1px solid var(--line); border-radius: 999px;
+    background: rgba(35, 36, 41, .9);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    visibility: hidden; opacity: 0; transform: translate(-50%, 22px);
+  }
+  .fab.show { visibility: visible; opacity: 1; transform: translate(-50%, 0); }
+  .fab a {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 46px; padding: 0 20px; border-radius: 999px;
+    text-decoration: none; font-weight: 700; font-size: 15px; white-space: nowrap;
+  }
+  .fab svg.i { width: 20px; height: 20px; }
+  .fab .fab-call { background: var(--brass); color: var(--on-brass); }
+  .fab .fab-wa { color: var(--gold-hi); border: 1px solid var(--line); }
+  .fab .fab-wa svg.i { color: var(--brass); }
+  @media (prefers-reduced-motion: no-preference) {
+    .fab { transition: opacity .3s ease, transform .35s cubic-bezier(.2, .7, .2, 1), visibility 0s linear .35s; }
+    .fab.show { transition-delay: 0s; }
+  }
+
+  /* Work steps timeline */
+  .tl { list-style: none; margin: 18px 0 0; padding: 0; }
+  .tl li { position: relative; display: flex; gap: 14px; padding-bottom: 22px; }
+  .tl li:last-child { padding-bottom: 0; }
+  .tl li:not(:last-child)::before, .tl li:not(:last-child)::after {
+    content: ""; position: absolute; top: 34px; bottom: 4px; inset-inline-start: 14px;
+    width: 2px; border-radius: 1px;
+  }
+  .tl li:not(:last-child)::before { background: var(--line); }
+  .tl li:not(:last-child)::after { background: var(--brass); transform-origin: top; transform: scaleY(var(--f, 0)); }
+  .dot {
+    position: relative; flex: none; width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center; background: var(--bg);
+    border: 1.5px solid var(--brass); color: var(--gold-hi);
+    font-weight: 700; font-size: 14px; line-height: 1;
+  }
+  .tl li:last-child .dot { background: var(--brass); color: var(--on-brass); }
+  .js .tl li:last-child .dot { background: var(--bg); color: var(--gold-hi); }
+  .js .tl li.done .dot { background: var(--brass); color: var(--on-brass); }
+  .js .tl li.done b { color: var(--gold-hi); }
+  .tl .s-txt { padding-top: 1px; }
+  .tl b { display: block; font-weight: 600; line-height: 1.7; }
+  .tl small { display: block; color: var(--muted); font-size: 14px; line-height: 1.7; }
+  @media (prefers-reduced-motion: no-preference) {
+    .tl li:nth-child(1) { --d: .25s; }
+    .tl li:nth-child(2) { --d: .4s; }
+    .tl li:nth-child(3) { --d: .55s; }
+    .tl li:nth-child(4) { --d: .7s; }
+    .tl li:nth-child(5) { --d: .85s; }
+    .js .steps li {
+      opacity: 0; transform: translateX(22px);
+      transition: opacity .5s ease var(--d, 0s), transform .55s cubic-bezier(.2, .7, .2, 1) var(--d, 0s);
+    }
+    .js .steps.in li { opacity: 1; transform: none; }
+    .js .steps .dot {
+      transform: scale(.4);
+      transition: transform .55s cubic-bezier(.2, .9, .3, 1.4) var(--d, 0s), background-color .3s ease, color .3s ease;
+    }
+    .js .steps.in .dot { transform: none; }
+    .js .steps li::before { transform: scaleY(0); transform-origin: top; transition: transform .45s ease calc(var(--d, 0s) + .2s); }
+    .js .steps.in li::before { transform: scaleY(1); }
+    .tl b { transition: color .3s ease; }
+    @keyframes ring { from { transform: scale(1); opacity: .75; } to { transform: scale(1.9); opacity: 0; } }
+    .tl li.active .dot::after {
+      content: ""; position: absolute; inset: -1.5px; border-radius: 50%;
+      border: 1.5px solid var(--brass); animation: ring 1.9s ease-out infinite;
+    }
+  }
+
+  /* Payment items (card + IBAN) */
+  .payitem + .payitem { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .paylabel { display: block; margin-bottom: 4px; text-align: center; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+  .cardno.sheba { font-size: 19px; letter-spacing: .06em; line-height: 1.7; }
+  .cardno.sheba span { display: block; }
 </style>
 </head>
 <body>
@@ -311,11 +391,33 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
       <span class="chev" aria-hidden="true"></span>
     </summary>
     <div class="paybody">
-      <div class="cardno ltr" id="cardno">6037 9915 4129 6632</div>
-      <button class="copy" id="copyBtn" type="button">کپی شماره کارت</button>
+      <div class="payitem">
+        <small class="paylabel">شماره کارت</small>
+        <div class="cardno ltr" id="cardno">6037 9915 4129 6632</div>
+        <button class="copy" id="copyBtn" type="button">کپی شماره کارت</button>
+      </div>
+      <div class="payitem">
+        <small class="paylabel">شماره شبا</small>
+        <div class="cardno sheba ltr" id="shebaNo"><span>IR29 0170 0000 0011</span><span>8871 9470 04</span></div>
+        <button class="copy" id="copyShebaBtn" type="button">کپی شماره شبا</button>
+      </div>
       <p class="status" id="status" role="status" aria-live="polite"></p>
     </div>
   </details>
+
+  <section class="block reveal steps">
+    <div class="head">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span><b>مراحل کار</b><small>از اولین گفتگو تا نصب</small></span>
+    </div>
+    <ol class="tl">
+      <li><span class="dot" aria-hidden="true">۱</span><span class="s-txt"><b>مشاوره</b><small>نیاز و سلیقهٔ شما را می‌شنویم</small></span></li>
+      <li><span class="dot" aria-hidden="true">۲</span><span class="s-txt"><b>اندازه‌گیری</b><small>ابعاد دقیق فضا را برداشت می‌کنیم</small></span></li>
+      <li><span class="dot" aria-hidden="true">۳</span><span class="s-txt"><b>طراحی</b><small>طرحی متناسب با فضای شما</small></span></li>
+      <li><span class="dot" aria-hidden="true">۴</span><span class="s-txt"><b>ساخت</b><small>ساخت سفارشی از جنس MDF</small></span></li>
+      <li><span class="dot" aria-hidden="true">۵</span><span class="s-txt"><b>نصب</b><small>تحویل و نصب در محل</small></span></li>
+    </ol>
+  </section>
 
   <div class="actions reveal">
     <button class="btn" id="saveBtn" type="button">
@@ -329,6 +431,17 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
   </div>
   <p class="status" id="actStatus" role="status" aria-live="polite"></p>
 </main>
+
+<div class="fab" id="fab" role="group" aria-label="تماس سریع">
+  <a class="fab-call" href="tel:09128942988">
+    <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    <span>تماس</span>
+  </a>
+  <a class="fab-wa" href="https://wa.me/989128942988" target="_blank" rel="noopener noreferrer">
+    <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    <span>واتساپ</span>
+  </a>
+</div>
 
 <script>
 (function () {
@@ -434,7 +547,7 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
 
     var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!calm) {
-      var marks = [].slice.call(document.querySelectorAll(".lead, .cta, .list .row, details, .actions"));
+      var marks = [].slice.call(document.querySelectorAll(".lead, .cta, .list .row, .steps, details, .actions"));
       var tops = [], lastIdx = null, lastCollapsed = null, pending = false;
       var measureMarks = function () {
         var sc = window.pageYOffset || 0;
@@ -462,6 +575,55 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
     }
   } catch (e) {}
 
+  /* Floating quick-contact bar */
+  try {
+    var fab = document.getElementById("fab");
+    var fabPending = false;
+    var fabCheck = function () {
+      fabPending = false;
+      /* shows once the header has collapsed (the user has scrolled into the page) */
+      fab.classList.toggle("show", (window.pageYOffset || 0) > 260);
+    };
+    fabCheck();
+    window.addEventListener("scroll", function () {
+      if (!fabPending) { fabPending = true; requestAnimationFrame(fabCheck); }
+    }, { passive: true });
+    window.addEventListener("resize", fabCheck);
+  } catch (e) {}
+
+  /* Steps timeline: the line fills as you scroll and the current step pulses */
+  try {
+    var stepLis = [].slice.call(document.querySelectorAll(".tl li"));
+    var stepDots = stepLis.map(function (li) { return li.querySelector(".dot"); });
+    var stepPending = false, lastActive = -1;
+    var stepUpdate = function () {
+      stepPending = false;
+      var ref = window.innerHeight * 0.7;
+      if (window.innerHeight + (window.pageYOffset || 0) >= document.documentElement.scrollHeight - 4) ref = 1e9;
+      var c = stepDots.map(function (d) { var r = d.getBoundingClientRect(); return r.top + r.height / 2; });
+      var active = -1;
+      for (var i = 0; i < stepLis.length; i++) {
+        var done = c[i] <= ref;
+        stepLis[i].classList.toggle("done", done);
+        if (done) active = i;
+        if (i < stepLis.length - 1) {
+          var f = (ref - c[i]) / (c[i + 1] - c[i]);
+          stepLis[i].style.setProperty("--f", (f < 0 ? 0 : (f > 1 ? 1 : f)).toFixed(3));
+        }
+      }
+      for (var j = 0; j < stepLis.length; j++) stepLis[j].classList.toggle("active", j === active);
+      if (active !== lastActive) {
+        if (lastActive !== -1 && typeof tick === "function") tick(7, false);
+        lastActive = active;
+      }
+    };
+    stepUpdate();
+    window.addEventListener("scroll", function () {
+      if (!stepPending) { stepPending = true; requestAnimationFrame(stepUpdate); }
+    }, { passive: true });
+    window.addEventListener("resize", stepUpdate);
+  } catch (e) {}
+
   var url = location.href.split("#")[0].split("?")[0];
   var RAW = "6037991541296632";
 
@@ -487,24 +649,28 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
     }
   }
 
-  /* Card number */
+  /* Card number and IBAN */
   var status = document.getElementById("status");
-  document.getElementById("copyBtn").addEventListener("click", function () {
-    copyText(RAW, function (ok) {
-      if (ok) {
-        status.textContent = "شماره کارت کپی شد";
-      } else {
-        try {
-          var r = document.createRange();
-          r.selectNodeContents(document.getElementById("cardno"));
-          var s = window.getSelection();
-          s.removeAllRanges();
-          s.addRange(r);
-        } catch (e) {}
-        status.textContent = "شماره انتخاب شد، نگه دارید و کپی کنید";
-      }
+  var bindCopy = function (btnId, elId, value, okMsg) {
+    document.getElementById(btnId).addEventListener("click", function () {
+      copyText(value, function (ok) {
+        if (ok) {
+          status.textContent = okMsg;
+        } else {
+          try {
+            var r = document.createRange();
+            r.selectNodeContents(document.getElementById(elId));
+            var s = window.getSelection();
+            s.removeAllRanges();
+            s.addRange(r);
+          } catch (e) {}
+          status.textContent = "شماره انتخاب شد، نگه دارید و کپی کنید";
+        }
+      });
     });
-  });
+  };
+  bindCopy("copyBtn", "cardno", RAW, "شماره کارت کپی شد");
+  bindCopy("copyShebaBtn", "shebaNo", "IR290170000000118871947004", "شماره شبا کپی شد");
 
   /* Share page link */
   var act = document.getElementById("actStatus");
