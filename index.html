@@ -21,7 +21,7 @@
   "name": "shelfkhas",
   "description": "طراحی و ساخت سفارشی محصولات MDF و دکوراسیون منزل: شلف و دکور دیواری، جاکفشی، میز تلویزیون، کمد و دراور، تخت و سرویس خواب.",
   "telephone": "+989128942988",
-  "geo": { "@type": "GeoCoordinates", "latitude": 35.59216306906719, "longitude": 51.401206388246514 },
+  "geo": { "@type": "GeoCoordinates", "latitude": 35.568444, "longitude": 51.305194 },
   "sameAs": ["https://www.instagram.com/shelfkhas"]
 }
 </script>
@@ -55,7 +55,7 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
     line-height: 1.8;
     -webkit-text-size-adjust: 100%;
   }
-  .wrap { max-width: 440px; margin: 0 auto; padding: 14px 20px 104px; }
+  .wrap { position: relative; z-index: 1; max-width: 440px; margin: 0 auto; padding: 14px 20px 116px; }
 
   .logo-wrap { position: relative; width: 100%; }
   .logo-wrap::before {
@@ -255,18 +255,21 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
   /* Floating quick-contact bar (appears after the user scrolls into the page) */
   .fab {
     position: fixed; left: 50%; z-index: 40;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(26px + env(safe-area-inset-bottom, 0px));
     display: flex; gap: 6px; padding: 6px; width: max-content; max-width: calc(100vw - 32px);
     border: 1px solid var(--line); border-radius: 999px;
-    background: rgba(35, 36, 41, .9);
+    background: rgba(35, 36, 41, .96);
     -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
     visibility: hidden; opacity: 0; transform: translate(-50%, 22px);
+    touch-action: manipulation;
   }
   .fab.show { visibility: visible; opacity: 1; transform: translate(-50%, 0); }
   .fab a {
     display: flex; align-items: center; justify-content: center; gap: 8px;
-    min-height: 46px; padding: 0 20px; border-radius: 999px;
+    min-height: 50px; padding: 0 20px; border-radius: 999px;
     text-decoration: none; font-weight: 700; font-size: 15px; white-space: nowrap;
+    touch-action: manipulation; position: relative; z-index: 1;
   }
   .fab svg.i { width: 20px; height: 20px; }
   .fab .fab-call { background: var(--brass); color: var(--on-brass); }
@@ -386,7 +389,7 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
       <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
       <span class="txt"><b>اینستاگرام</b><small class="ltr">@shelfkhas</small></span>
     </a>
-    <a class="row" id="mapLink" href="https://www.google.com/maps?q=35.59216306906719,51.401206388246514" target="_blank" rel="noopener noreferrer">
+    <a class="row" id="mapLink" href="https://www.google.com/maps/search/?api=1&query=35.568444,51.305194" target="_blank" rel="noopener noreferrer">
       <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       <span class="txt"><b>لوکیشن</b><small>باز کردن با برنامهٔ نقشهٔ گوشی</small></span>
     </a>
@@ -740,7 +743,8 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
       "TEL;TYPE=CELL,VOICE:+989128942988",
       "URL:" + url,
       "URL:https://www.instagram.com/shelfkhas",
-      "GEO:35.592163;51.401206",
+      "GEO:35.568444;51.305194",
+      "URL:https://www.google.com/maps/search/?api=1&query=35.568444,51.305194",
       "NOTE:طراحی و ساخت سفارشی محصولات MDF و دکوراسیون منزل",
       "END:VCARD"
     ];
@@ -759,19 +763,6 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
     }
   });
 
-  /* One location button: opens the map app the phone has */
-  var mapLink = document.getElementById("mapLink");
-  if (mapLink) {
-    var LL = "35.59216306906719,51.401206388246514";
-    var ua = navigator.userAgent || "";
-    var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-    if (/Android/i.test(ua)) {
-      mapLink.href = "geo:" + LL + "?q=" + LL;   /* Android shows all installed map apps (Neshan, Balad, Google Maps...) */
-      mapLink.removeAttribute("target");
-    } else if (isIOS) {
-      mapLink.href = "https://maps.apple.com/maps?ll=" + LL + "&q=" + LL + "&t=m";
-    }
-  }
 })();
 </script>
 </body>
