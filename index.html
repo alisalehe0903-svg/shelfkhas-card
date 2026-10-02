@@ -21,7 +21,7 @@
   "name": "shelfkhas",
   "description": "طراحی و ساخت سفارشی محصولات MDF و دکوراسیون منزل: شلف و دکور دیواری، جاکفشی، میز تلویزیون، کمد و دراور، تخت و سرویس خواب.",
   "telephone": "+989128942988",
-  "geo": { "@type": "GeoCoordinates", "latitude": 35.568444, "longitude": 51.305194 },
+  "geo": { "@type": "GeoCoordinates", "latitude": 35.568508, "longitude": 51.30529 },
   "sameAs": ["https://www.instagram.com/shelfkhas"]
 }
 </script>
@@ -389,7 +389,7 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
       <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>
       <span class="txt"><b>اینستاگرام</b><small class="ltr">@shelfkhas</small></span>
     </a>
-    <a class="row" id="mapLink" href="https://www.google.com/maps/search/?api=1&query=35.568444,51.305194" target="_blank" rel="noopener noreferrer">
+    <a class="row" id="mapLink" href="https://maps.google.com/?q=35.568508,51.30529" target="_blank" rel="noopener noreferrer">
       <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       <span class="txt"><b>لوکیشن</b><small>باز کردن با برنامهٔ نقشهٔ گوشی</small></span>
     </a>
@@ -665,6 +665,16 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
     }
   } catch (e) {}
 
+  /* Location: on Android open the phone's own map-app chooser (Neshan, Balad, Google Maps...) */
+  try {
+    var mapLink = document.getElementById("mapLink");
+    if (mapLink && /Android/i.test(navigator.userAgent || "")) {
+      var geoLL = "35.568508,51.30529";
+      mapLink.setAttribute("href", "geo:" + geoLL + "?q=" + geoLL);
+      mapLink.removeAttribute("target");
+    }
+  } catch (e) {}
+
   var url = location.href.split("#")[0].split("?")[0];
   var SHARE_URL = "http://b2n.ir/Shelfkhas";   /* the link the Share button sends */
   var RAW = "6037991541296632";
@@ -743,8 +753,8 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
       "TEL;TYPE=CELL,VOICE:+989128942988",
       "URL:" + url,
       "URL:https://www.instagram.com/shelfkhas",
-      "GEO:35.568444;51.305194",
-      "URL:https://www.google.com/maps/search/?api=1&query=35.568444,51.305194",
+      "GEO:35.568508;51.30529",
+      "URL:https://maps.google.com/?q=35.568508,51.30529",
       "NOTE:طراحی و ساخت سفارشی محصولات MDF و دکوراسیون منزل",
       "END:VCARD"
     ];
