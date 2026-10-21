@@ -726,20 +726,28 @@ setTimeout(function () { if (!window.__motionOK) document.documentElement.classL
     }
   } catch (e) {}
 
-  /* Floating quick-contact bar */
+  /* Floating quick-contact bar: shown only while the main call button is out of view */
   try {
     var fab = document.getElementById("fab");
-    var fabPending = false;
-    var fabCheck = function () {
-      fabPending = false;
-      /* shows once the header has collapsed (the user has scrolled into the page) */
-      fab.classList.toggle("show", (window.pageYOffset || 0) > 260);
-    };
-    fabCheck();
-    window.addEventListener("scroll", function () {
-      if (!fabPending) { fabPending = true; requestAnimationFrame(fabCheck); }
-    }, { passive: true });
-    window.addEventListener("resize", fabCheck);
+    var ctaMain = document.querySelector(".cta");
+    if (ctaMain && "IntersectionObserver" in window) {
+      var fabIo = new IntersectionObserver(function (entries) {
+        var en = entries[entries.length - 1];
+        fab.classList.toggle("show", !en.isIntersecting);
+      }, { threshold: 0, rootMargin: "0px" });
+      fabIo.observe(ctaMain);
+    } else {
+      var fabPending = false;
+      var fabCheck = function () {
+        fabPending = false;
+        fab.classList.toggle("show", (window.pageYOffset || 0) > 260);
+      };
+      fabCheck();
+      window.addEventListener("scroll", function () {
+        if (!fabPending) { fabPending = true; requestAnimationFrame(fabCheck); }
+      }, { passive: true });
+      window.addEventListener("resize", fabCheck);
+    }
   } catch (e) {}
 
   /* Steps timeline: the line fills as you scroll and the current step pulses */
